@@ -1,15 +1,17 @@
 import pandas as pd
 import numpy as np
 from sklearn import preprocessing
+from sklearn.neural_network import MLPClassifier
+from sklearn.model_selection import KFold, train_test_split
+from sklearn.metrics import confusion_matrix
+
 
 # 18 inputs in initial layer
 
-def get_from_csv(path):
+def get_from_csv(data):
     """ Return predictors and targets from a single csv """
-    base = pd.read_csv(path)
-    # TODO: pre-process attributes
-    predictors = base.iloc[:, 0:11].values
-    targets = base.iloc[:, 11].values
+    predictors = data.iloc[:, 0:11].values
+    targets = data.iloc[:, 11].values
 
     # escaler = preprocessing.MinMaxScaler()
     escaler = preprocessing.StandardScaler()
@@ -38,4 +40,38 @@ def get_from_csv(path):
     return predictors, targets
 
 
-get_from_csv('heart.csv')
+def accuracy(confusion_matrix):
+    diagonal_sum = confusion_matrix.trace()
+    sum_of_all_elements = confusion_matrix.sum()
+    return diagonal_sum / sum_of_all_elements
+
+
+def train_model(data_set_path):
+    kf = KFold(n_splits=10)
+    clf = MLPClassifier()
+    data = pd.read_csv(data_set_path)
+
+    # Splitting the dataset into  training and validation sets
+    training_set, validation_set = train_test_split(data, test_size=0.2, random_state=21)
+
+    X_train, Y_train = get_from_csv(training_set)
+    X_val, Y_val = get_from_csv(validation_set)
+
+    # quantidade_de_neuronios_na_camada_oculta = (numero de entradas + numero de saida) / 2
+    # Initializing the MLPClassifier
+    classifier = MLPClassifier(hidden_layer_sizes=(20, 11), max_iter=5000, activation='logistic', solver='adam',
+                               random_state=1, verbose=True)
+    # Fitting the training data to the network
+    classifier.fit(X_train, Y_train)
+
+    # Predicting y for X_val
+    Y_pred = classifier.predict(X_val)
+
+    # Comparing the predictions against the actual observations in y_val
+    cm = confusion_matrix(Y_pred, Y_val)
+
+    # Printing the accuracy
+    print(f"Accuracy of MLPClassifier : {accuracy(cm)}")
+
+
+train_model("heart.csv")

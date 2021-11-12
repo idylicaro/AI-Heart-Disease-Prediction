@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn import preprocessing
 from sklearn.neural_network import MLPClassifier
+from sklearn.linear_model import Perceptron
 from sklearn.model_selection import KFold, train_test_split
 from sklearn.metrics import confusion_matrix
 
@@ -46,7 +47,7 @@ def accuracy(confusion_matrix):
     return diagonal_sum / sum_of_all_elements
 
 
-def train_model(data_set_path):
+def train_model(data_set_path, classifier):
     kf = KFold(n_splits=10)
     clf = MLPClassifier()
     data = pd.read_csv(data_set_path)
@@ -57,10 +58,7 @@ def train_model(data_set_path):
     X_train, Y_train = get_from_csv(training_set)
     X_val, Y_val = get_from_csv(validation_set)
 
-    # quantidade_de_neuronios_na_camada_oculta = (numero de entradas + numero de saida) / 2
-    # Initializing the MLPClassifier
-    classifier = MLPClassifier(hidden_layer_sizes=(20, 11), max_iter=5000, activation='logistic', solver='adam',
-                               random_state=1, verbose=True)
+
     # Fitting the training data to the network
     classifier.fit(X_train, Y_train)
 
@@ -71,7 +69,20 @@ def train_model(data_set_path):
     cm = confusion_matrix(Y_pred, Y_val)
 
     # Printing the accuracy
-    print(f"Accuracy of MLPClassifier : {accuracy(cm)}")
+    print(f"Accuracy of Classifier : {accuracy(cm)}")
+
+# quantidade_de_neuronios_na_camada_oculta = (numero de entradas + numero de saida) / 2
+# Initializing the MLPClassifier
+classifier_mlp = MLPClassifier(hidden_layer_sizes=(10, 6, 3), max_iter=5000, activation='logistic', solver='adam',
+                               random_state=1, momentum=0.8, learning_rate_init=0.1, verbose=False)
+
+print('\n==MLP==')
+train_model("heart.csv", classifier_mlp)
+print('\n')
 
 
-train_model("heart.csv")
+classifier_ppn = Perceptron(max_iter=5000, verbose=False, n_iter_no_change=10)
+
+print('\n==Perceptron==')
+train_model("heart.csv", classifier_ppn)
+print('\n')

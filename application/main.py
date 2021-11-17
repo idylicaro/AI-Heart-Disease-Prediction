@@ -14,12 +14,45 @@ import json
 def evaluate(json):
     # load the model from disk
     classifier_mlp = pickle.load(open('mlp_model.sav', 'rb'))
+    data = pd.read_json('test.json', orient='records')
+    df = pd.json_normalize(data['data'])
     data = pd.read_csv('heart.csv')
-    x, _ = get_from_csv(data)
+    data.append(df)
+    x, _ = get_predictors_by_user_json(df.values)
 
     # predict_proba return [probability for '0', probability for '1']
     result = classifier_mlp.predict_proba(x[1].reshape(1, -1))
     return f'A probabilidade de você ter algum problema no coração é de {"{:.2f}".format(result[0][1] * 100)}%.'
+
+
+def get_predictors_by_user_json(predictors_user):
+    data = pd.read_csv('heart.csv')
+    predictors = data.iloc[:, 0:11].values
+    predictors.append(predictors_user)
+    escaler = preprocessing.StandardScaler()
+    escalerLabel = preprocessing.LabelBinarizer()
+
+    age = escaler.fit_transform(np.array(predictors[:, 0]).reshape(-1, 1))
+    escalerLabel.fit(['M', 'F'])
+    sex = escalerLabel.transform(np.array(predictors[:, 1]).reshape(-1, 1))
+    escalerLabel.fit(['ATA', 'NAP', 'ASY', 'TA'])
+    chestPainType = escalerLabel.transform(np.array(predictors[:, 2]).reshape(-1, 1))
+    restingBP = escaler.fit_transform(np.array(predictors[:, 3]).reshape(-1, 1))
+    cholesterol = escaler.fit_transform(np.array(predictors[:, 4]).reshape(-1, 1))
+    fastingBS = escaler.fit_transform(np.array(predictors[:, 5]).reshape(-1, 1))
+    escalerLabel.fit(['Normal', 'ST', 'LVH'])
+    restingECG = escalerLabel.transform(np.array(predictors[:, 6]).reshape(-1, 1))
+    maxHR = escaler.fit_transform(np.array(predictors[:, 7]).reshape(-1, 1))
+    escalerLabel.fit(['N', 'Y'])
+    exerciseAngina = escalerLabel.fit_transform(np.array(predictors[:, 8]).reshape(-1, 1))
+    oldpeak = escaler.fit_transform(np.array(predictors[:, 9]).reshape(-1, 1))
+    escalerLabel.fit(['Up', 'Flat', 'Down'])
+    sT_Slope = escalerLabel.transform(np.array(predictors[:, 10]).reshape(-1, 1))
+
+    predictors = np.column_stack((age, sex, chestPainType, restingBP, cholesterol, fastingBS, restingECG, maxHR,
+                                  exerciseAngina, oldpeak, sT_Slope))
+
+    return predictors
 
 
 def get_from_csv(data):
@@ -58,6 +91,7 @@ def accuracy(confusion_matrix):
     diagonal_sum = confusion_matrix.trace()
     sum_of_all_elements = confusion_matrix.sum()
     return diagonal_sum / sum_of_all_elements
+
 
 def train_model(data_set_path, classifier):
     kf = KFold(n_splits=10)

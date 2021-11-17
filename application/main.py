@@ -1,3 +1,5 @@
+import pickle
+
 import pandas as pd
 import numpy as np
 from sklearn import preprocessing
@@ -9,16 +11,15 @@ import json
 
 
 # 18 inputs in initial layer
-
 def evaluate(json):
-    classifier_mlp = MLPClassifier(hidden_layer_sizes=(10, 6, 3), max_iter=5000, activation='logistic', solver='adam',
-                                   random_state=1, momentum=0.8, learning_rate_init=0.1, verbose=False)
-    classifier_mlp.coefs_ = read_coef_file('weight.json')
+    # load the model from disk
+    classifier_mlp = pickle.load(open('mlp_model.sav', 'rb'))
     data = pd.read_csv('heart.csv')
-    X, _ = get_from_csv(data)
-    # TODO: HAS ERROR
-    result = classifier_mlp.predict_proba(X[0].reshape(-1, 1))
-    print('result:',result)
+    x, _ = get_from_csv(data)
+
+    # predict_proba return [probability for '0', probability for '1']
+    result = classifier_mlp.predict_proba(x[1].reshape(1, -1))
+    return f'A probabilidade de você ter algum problema no coração é de {"{:.2f}".format(result[0][1] * 100)}%.'
 
 
 def get_from_csv(data):
@@ -58,25 +59,6 @@ def accuracy(confusion_matrix):
     sum_of_all_elements = confusion_matrix.sum()
     return diagonal_sum / sum_of_all_elements
 
-class NumpyEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, np.ndarray):
-            return obj.tolist()
-        return json.JSONEncoder.default(self, obj)
-
-def generate_coef_file(coefs):
-    data = {'coefs': coefs}
-    pd.Series(coefs).to_json('weight.json', orient='split')
-    # with open('weight.json', 'w') as outfile:
-    #     json.dump(data, outfile, cls=NumpyEncoder)
-
-
-def read_coef_file(path):
-    with open(path) as json_file:
-        data = json.load(json_file)
-        return data['data']
-
-
 def train_model(data_set_path, classifier):
     kf = KFold(n_splits=10)
     clf = MLPClassifier()
@@ -99,7 +81,7 @@ def train_model(data_set_path, classifier):
 
     # Printing the accuracy
     print(f"Accuracy of Classifier : {accuracy(cm)}")
-    return classifier.coefs_
+    return classifier
 
 
 # quantidade_de_neuronios_na_camada_oculta = (numero de entradas + numero de saida) / 2
@@ -108,7 +90,9 @@ classifier_mlp = MLPClassifier(hidden_layer_sizes=(10, 6, 3), max_iter=5000, act
                                random_state=1, momentum=0.8, learning_rate_init=0.1, verbose=False)
 
 print('\n==MLP==')
-generate_coef_file(train_model("heart.csv", classifier_mlp))
+# save the model to disk
+filename = 'mlp_model.sav'
+pickle.dump(train_model("heart.csv", classifier_mlp), open(filename, 'wb'))
 # print(read_coef_file('weight.json'))
 evaluate(None)
 

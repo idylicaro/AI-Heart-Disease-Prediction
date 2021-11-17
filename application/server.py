@@ -8,7 +8,8 @@ api = Api(app)
 class Disease(Resource):
     def post(self):
         json_data = request.get_json()
-
+        # TODO: ??Parse Json to a obj??
+        # call evaluate in main.py with json
         return {'result': 'Success'}, 200  # return data with 200 OK
 
 

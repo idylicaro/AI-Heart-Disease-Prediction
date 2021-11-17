@@ -5,9 +5,21 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.linear_model import Perceptron
 from sklearn.model_selection import KFold, train_test_split
 from sklearn.metrics import confusion_matrix
+import json
 
 
 # 18 inputs in initial layer
+
+def evaluate(json):
+    classifier_mlp = MLPClassifier(hidden_layer_sizes=(10, 6, 3), max_iter=5000, activation='logistic', solver='adam',
+                                   random_state=1, momentum=0.8, learning_rate_init=0.1, verbose=False)
+    classifier_mlp.coefs_ = read_coef_file('weight.json')
+    data = pd.read_csv('heart.csv')
+    X, _ = get_from_csv(data)
+    # TODO: HAS ERROR
+    result = classifier_mlp.predict_proba(X[0].reshape(-1, 1))
+    print('result:',result)
+
 
 def get_from_csv(data):
     """ Return predictors and targets from a single csv """
@@ -46,6 +58,24 @@ def accuracy(confusion_matrix):
     sum_of_all_elements = confusion_matrix.sum()
     return diagonal_sum / sum_of_all_elements
 
+class NumpyEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return json.JSONEncoder.default(self, obj)
+
+def generate_coef_file(coefs):
+    data = {'coefs': coefs}
+    pd.Series(coefs).to_json('weight.json', orient='split')
+    # with open('weight.json', 'w') as outfile:
+    #     json.dump(data, outfile, cls=NumpyEncoder)
+
+
+def read_coef_file(path):
+    with open(path) as json_file:
+        data = json.load(json_file)
+        return data['data']
+
 
 def train_model(data_set_path, classifier):
     kf = KFold(n_splits=10)
@@ -58,7 +88,6 @@ def train_model(data_set_path, classifier):
     X_train, Y_train = get_from_csv(training_set)
     X_val, Y_val = get_from_csv(validation_set)
 
-
     # Fitting the training data to the network
     classifier.fit(X_train, Y_train)
 
@@ -70,6 +99,8 @@ def train_model(data_set_path, classifier):
 
     # Printing the accuracy
     print(f"Accuracy of Classifier : {accuracy(cm)}")
+    return classifier.coefs_
+
 
 # quantidade_de_neuronios_na_camada_oculta = (numero de entradas + numero de saida) / 2
 # Initializing the MLPClassifier
@@ -77,9 +108,11 @@ classifier_mlp = MLPClassifier(hidden_layer_sizes=(10, 6, 3), max_iter=5000, act
                                random_state=1, momentum=0.8, learning_rate_init=0.1, verbose=False)
 
 print('\n==MLP==')
-train_model("heart.csv", classifier_mlp)
-print('\n')
+generate_coef_file(train_model("heart.csv", classifier_mlp))
+# print(read_coef_file('weight.json'))
+evaluate(None)
 
+print('\n')
 
 classifier_ppn = Perceptron(max_iter=5000, verbose=False, n_iter_no_change=10)
 

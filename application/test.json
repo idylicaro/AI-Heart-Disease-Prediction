@@ -1,17 +1,17 @@
 {
       "data" : [
       {
-            "Age": "40",
-            "Sex": "M",
-            "ChestPainType": "ATA",
-            "RestingBP": "140",
-            "Cholesterol": "289",
+            "Age": "49",
+            "Sex": "F",
+            "ChestPainType": "NAP",
+            "RestingBP": "160",
+            "Cholesterol": "180",
             "FastingBS": "0",
             "RestingECG": "Normal",
-            "MaxHR": "172",
+            "MaxHR": "156",
             "ExerciseAngina": "N",
-            "Oldpeak": "0",
-            "ST_Slope": "Up"
+            "Oldpeak": "1",
+            "ST_Slope": "Flat"
       }
       ]
 }

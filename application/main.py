@@ -7,13 +7,12 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.linear_model import Perceptron
 from sklearn.model_selection import KFold, train_test_split
 from sklearn.metrics import confusion_matrix
-import json
-
 
 # 18 inputs in initial layer
 def evaluate(json):
     # load the model from disk
     classifier_mlp = pickle.load(open('mlp_model.sav', 'rb'))
+    # TODO: read json by API endpoint
     data = pd.read_json('test.json', orient='records')
     user_df = pd.json_normalize(data['data'])
     data = pd.read_csv('heart.csv')
@@ -95,8 +94,7 @@ classifier_mlp = MLPClassifier(hidden_layer_sizes=(10, 6, 3), max_iter=5000, act
 
 print('\n==MLP==')
 # save the model to disk
-filename = 'mlp_model.sav'
-pickle.dump(train_model("heart.csv", classifier_mlp), open(filename, 'wb'))
+pickle.dump(train_model("heart.csv", classifier_mlp), open('mlp_model.sav', 'wb'))
 result = evaluate(None)
 print(result)
 print('\n')

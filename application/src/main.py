@@ -9,13 +9,13 @@ from sklearn.model_selection import KFold, train_test_split
 from sklearn.metrics import confusion_matrix
 
 # 18 inputs in initial layer
-def evaluate(json):
+def evaluate(json_path='../test.json', heart_csv_path='../heart.csv', mlp_model_path='../mlp_model.sav'):
     # load the model from disk
-    classifier_mlp = pickle.load(open('mlp_model.sav', 'rb'))
+    classifier_mlp = pickle.load(open(mlp_model_path, 'rb'))
     # TODO: read json by API endpoint
-    data = pd.read_json('test.json', orient='records')
+    data = pd.read_json(json_path, orient='records')
     user_df = pd.json_normalize(data['data'])
-    data = pd.read_csv('heart.csv')
+    data = pd.read_csv(heart_csv_path)
     dfs = [data, user_df]
     df = pd.concat(dfs, ignore_index=True)
     x, _ = get_from_csv(df)
@@ -87,20 +87,22 @@ def train_model(data_set_path, classifier):
     return classifier
 
 
-# quantidade_de_neuronios_na_camada_oculta = (numero de entradas + numero de saida) / 2
-# Initializing the MLPClassifier
-classifier_mlp = MLPClassifier(hidden_layer_sizes=(10, 6, 3), max_iter=5000, activation='logistic', solver='adam',
-                               random_state=1, momentum=0.8, learning_rate_init=0.1, verbose=False)
+def MLP_training():
+    # quantidade_de_neuronios_na_camada_oculta = (numero de entradas + numero de saida) / 2
+    # Initializing the MLPClassifier
+    classifier_mlp = MLPClassifier(hidden_layer_sizes=(10, 6, 3), max_iter=5000, activation='logistic', solver='adam',
+                                   random_state=1, momentum=0.8, learning_rate_init=0.1, verbose=False)
+    print('\n==MLP==')
+    # save the model to disk
+    pickle.dump(train_model("application/heart.csv", classifier_mlp), open('application/mlp_model.sav', 'wb'))
+    result = evaluate(None)
+    print(result)
+    print('\n')
 
-print('\n==MLP==')
-# save the model to disk
-pickle.dump(train_model("heart.csv", classifier_mlp), open('mlp_model.sav', 'wb'))
-result = evaluate(None)
-print(result)
-print('\n')
 
-classifier_ppn = Perceptron(max_iter=5000, verbose=False, n_iter_no_change=10)
+def Perceotron_training():
+    classifier_ppn = Perceptron(max_iter=5000, verbose=False, n_iter_no_change=10)
+    print('\n==Perceptron==')
+    train_model("../heart.csv", classifier_ppn)
+    print('\n')
 
-print('\n==Perceptron==')
-train_model("heart.csv", classifier_ppn)
-print('\n')

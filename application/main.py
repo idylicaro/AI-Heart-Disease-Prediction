@@ -14,13 +14,16 @@ import json
 def evaluate(json):
     # load the model from disk
     classifier_mlp = pickle.load(open('mlp_model.sav', 'rb'))
+    data = pd.read_json('test.json', orient='records')
+    user_df = pd.json_normalize(data['data'])
     data = pd.read_csv('heart.csv')
-    x, _ = get_from_csv(data)
+    dfs = [data, user_df]
+    df = pd.concat(dfs, ignore_index=True)
+    x, _ = get_from_csv(df)
 
     # predict_proba return [probability for '0', probability for '1']
-    result = classifier_mlp.predict_proba(x[1].reshape(1, -1))
+    result = classifier_mlp.predict_proba(x[918].reshape(1, -1))
     return f'A probabilidade de você ter algum problema no coração é de {"{:.2f}".format(result[0][1] * 100)}%.'
-
 
 def get_from_csv(data):
     """ Return predictors and targets from a single csv """
@@ -59,6 +62,7 @@ def accuracy(confusion_matrix):
     sum_of_all_elements = confusion_matrix.sum()
     return diagonal_sum / sum_of_all_elements
 
+
 def train_model(data_set_path, classifier):
     kf = KFold(n_splits=10)
     clf = MLPClassifier()
@@ -93,9 +97,8 @@ print('\n==MLP==')
 # save the model to disk
 filename = 'mlp_model.sav'
 pickle.dump(train_model("heart.csv", classifier_mlp), open(filename, 'wb'))
-# print(read_coef_file('weight.json'))
-evaluate(None)
-
+result = evaluate(None)
+print(result)
 print('\n')
 
 classifier_ppn = Perceptron(max_iter=5000, verbose=False, n_iter_no_change=10)

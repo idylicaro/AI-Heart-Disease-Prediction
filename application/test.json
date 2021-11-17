@@ -1,3 +1,17 @@
 {
-  "data":["40","M","ATA","140","289","0","Normal","172","N","0","Up","0"]
+      "data" : [
+      {
+            "Age": "40",
+            "Sex": "M",
+            "ChestPainType": "ATA",
+            "RestingBP": "140",
+            "Cholesterol": "289",
+            "FastingBS": "0",
+            "RestingECG": "Normal",
+            "MaxHR": "172",
+            "ExerciseAngina": "N",
+            "Oldpeak": "0",
+            "ST_Slope": "Up"
+      }
+      ]
 }

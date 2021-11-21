@@ -1,6 +1,11 @@
 # AI-Heart-Disease-Prediction
 This is a project developed in a discipline at the university.
 
+## How to execute
+    - First, install requiriments
+    - Second, run ```pip install flask-restful```
+    - Third, if don't exist 'jsons' folder in application folder, create.
+    - Execute server.py
 ---
 ### Attributes Information
 

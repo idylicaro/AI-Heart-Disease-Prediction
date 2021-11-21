@@ -4,10 +4,12 @@ import random
 import pandas as pd
 from flask import Flask, request
 from flask_restful import Resource, Api, reqparse
+from flask_cors import CORS
 from src.main import evaluate
 import os
 
 app = Flask(__name__)
+CORS(app)
 api = Api(app)
 
 

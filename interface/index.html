@@ -1,138 +1,153 @@
 <!DOCTYPE html>
 <html lang="pt_br">
-    <head>
-        <title></title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="style.css" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Poppins" rel="stylesheet">
-    </head>
-    <body>
 
-        <div id="main">
-            <div id="header">
-                <span id="title">Teste de Coração</span>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="style.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins" rel="stylesheet">
+</head>
+
+<body>
+
+    <div id="main">
+        <div id="header">
+            <span id="title">Teste de Coração</span>
+        </div>
+
+        <div id="container">
+            <div id="section">
+                <span id="title-form">Dados pessoais</span>
+                <label>Idade</label>
+                <input type="number" id="age" placeholder="Digite a sua idade" />
+                <label>Sexo</label>
+                <select id="sex">
+                    <option disabled selected>Selecione</option>
+                    <option value="M">Masculino</option>
+                    <option value="F">Feminino</option>
+                </select>
+                <label>Tipo de dor no peito</label>
+                <select id="chestpaintype">
+                    <option disabled selected>Selecione</option>
+                    <option value="ASY">Asintomático</option>
+                    <option value="TA">Aperto no peito</option>
+                    <option value="ATA">Aperto no peito asintomático</option>
+                    <option value="NAP">Sem aperto no peito</option>
+                </select>
+                <label>Pressão sanguínea</label>
+                <input type="number" id="bpm" placeholder="Digite a pressão sanguínea" />
+                <label>Colesterol LDL</label>
+                <input type="number" id="cholesterol" placeholder="Digite o índice do seu colesterol" />
+                <label>Glicose</label>
+                <select id="glicose">
+                    <option disabled selected>Selecione</option>
+                    <option value="1">Maior > 120 mg/dl</option>
+                    <option value="0">Normal</option>
+                </select>
+                <span id="title-form">Dados do seu ECG</span>
+                <label>Resultado último ECG</label>
+                <select id="ecg">
+                    <option disabled selected>Selecione</option>
+                    <option value="Normal">Normal</option>
+                    <option value="St">ST</option>
+                    <option value="LVH">LVH</option>
+                </select>
+                <label>Máxima frequência</label>
+                <input type="number" id="maxhr" placeholder="Digite a máxima frequência alcançada" />
+                <label>Exame feito com exercício</label>
+                <select id="exercise">
+                    <option disabled selected>Selecione</option>
+                    <option value="Y">Sim</option>
+                    <option value="N">Não</option>
+                </select>
+                <label>Pico máximo</label>
+                <input type="number" id="oldpeak" placeholder="Digite pico máximo alcançada" />
+                <label>Inclinação pico máximo</label>
+                <select id="slope">
+                    <option disabled selected>Selecione</option>
+                    <option value="Upsloping">Alto</option>
+                    <option value="Flat">Médio</option>
+                    <option value="Downsloping">Baixo</option>
+                </select>
+
+                <button onclick="sendData()">
+                    Enviar
+                </button>
             </div>
-        
-            <div id="container">
-                <div id="section">
-                    <span id="title-form">Dados pessoais</span>
-                    <label>Idade</label>
-                    <input type="number" id="age" placeholder="Digite a sua idade" />
-                    <label>Sexo</label>
-                    <select id="sex">
-                        <option disabled selected>Selecione</option>
-                        <option value="M">Masculino</option>
-                        <option value="F">Feminino</option>
-                    </select>
-                    <label>Tipo de dor no peito</label>
-                    <select id="chestpaintype">
-                        <option disabled selected>Selecione</option>
-                        <option value="ASY">Asintomático</option>
-                        <option value="TA">Aperto no peito</option>
-                        <option value="ATA">Aperto no peito asintomático</option>
-                        <option value="NAP">Sem aperto no peito</option>
-                    </select>
-                    <label>Pressão sanguínea</label>
-                    <input type="number" id="bpm" placeholder="Digite a pressão sanguínea" />
-                    <label>Colesterol LDL</label>
-                    <input type="number" id="cholesterol" placeholder="Digite o índice do seu colesterol" />
-                    <label>Glicose</label>
-                    <select id="glicose">
-                        <option disabled selected>Selecione</option>
-                        <option value="1">Maior  > 120 mg/dl</option>
-                        <option value="0">Normal</option>
-                    </select>
-                    <span id="title-form">Dados do seu ECG</span>
-                    <label>Resultado último ECG</label>
-                    <select id="ecg">
-                        <option disabled selected>Selecione</option>
-                        <option value="Normal">Normal</option>
-                        <option value="St">ST</option>
-                        <option value="LVH">LVH</option>
-                    </select>
-                    <label>Máxima frequência</label>
-                    <input type="number" id="maxhr" placeholder="Digite a máxima frequência alcançada" />
-                    <label>Exame feito com exercício</label>
-                    <select id="exercise">
-                        <option disabled selected>Selecione</option>
-                        <option value="Y">Sim</option>
-                        <option value="N">Não</option>
-                    </select>
-                    <label>Pico máximo</label>
-                    <input type="number" id="oldpeak" placeholder="Digite pico máximo alcançada" />
-                    <label>Inclinação pico máximo</label>
-                    <select id="slope">
-                        <option disabled selected>Selecione</option>
-                        <option value="Upsloping">Alto</option>
-                        <option value="Flat">Médio</option>
-                        <option value="Downsloping">Baixo</option>
-                    </select>
-    
-                    <button onclick="sendData()">
-                        Enviar 
-                    </button>
-                </div>
-            </div>
         </div>
+    </div>
 
-        <div id="loading">
-            <div class="lds-ring">
-            <div></div><div></div><div></div><div></div></div>
-            <span id="text-loading">Processando os dados ...</span>
+    <div id="loading">
+        <div class="lds-ring">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
         </div>
+        <span id="text-loading">Processando os dados ...</span>
+    </div>
 
-        <div id="result">
+    <div id="result">
 
-        </div>
+    </div>
 
-    </body>
+</body>
 
-    <script>
+<script>
 
-        function sendData(){
+    function sendData() {
 
-            document.getElementById('main').classList.add('disable')
-            document.getElementById('loading').classList.add('show')
+        document.getElementById('main').classList.add('disable')
+        document.getElementById('loading').classList.add('show')
 
-            const age = document.getElementById('age').value;
-            const sex = document.getElementById('sex').value;
-            const paintype = document.getElementById('chestpaintype').value;
-            const bpm = document.getElementById('bpm').value;
-            const colesterol = document.getElementById('cholesterol').value;
-            const glicose = document.getElementById('glicose').value;
-            const ecg = document.getElementById('ecg').value;
-            const maxhr = document.getElementById('maxhr').value;
-            const exercise = document.getElementById('exercise').value;
-            const oldpeak = document.getElementById('oldpeak').value;
-            const slope = document.getElementById('slope').value;
+        const age = document.getElementById('age').value;
+        const sex = document.getElementById('sex').value;
+        const paintype = document.getElementById('chestpaintype').value;
+        const bpm = document.getElementById('bpm').value;
+        const colesterol = document.getElementById('cholesterol').value;
+        const glicose = document.getElementById('glicose').value;
+        const ecg = document.getElementById('ecg').value;
+        const maxhr = document.getElementById('maxhr').value;
+        const exercise = document.getElementById('exercise').value;
+        const oldpeak = document.getElementById('oldpeak').value;
+        const slope = document.getElementById('slope').value;
 
-            const url = "";
+        const url = "http://192.168.1.17:5444/disease";
 
-            const data = 
-            {
-                "Age": age,
-                "Sex": sex,
-                "ChestPainType": paintype,
-                "RestingBP": bpm,
-                "Cholesterol": colesterol,
-                "FastingBS": glicose,
-                "RestingECG": ecg,
-                "MaxHR": maxhr,
-                "ExerciseAngina": exercise,
-                "Oldpeak": oldpeak,
-                "ST_Slope": slope
-            }
-
-            fetch(url, {
-                headers: {
-                    "Content-type": "application/json"
-                },
-                body: data,
-                method: "post"
-            })
-            .then(res => console.log(res));
+        const data =
+        {
+            "data": [
+                {
+                    "Age": age,
+                    "Sex": sex,
+                    "ChestPainType": paintype,
+                    "RestingBP": bpm,
+                    "Cholesterol": colesterol,
+                    "FastingBS": glicose,
+                    "RestingECG": ecg,
+                    "MaxHR": maxhr,
+                    "ExerciseAngina": exercise,
+                    "Oldpeak": oldpeak,
+                    "ST_Slope": slope
+                }
+            ]
         }
+        fetch(url, {
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify(data),
+            method: "post"
+        })
+            .then(res => {
+                document.getElementById('loading').classList.remove('show')
+                document.getElementById('result').classList.add('show')
+                document.getElementById("result").innerHTML(`<span>${res['result']}</span>`)
+                console.log(res)
+            });
+    }
 
-    </script>
+</script>
+
 </html>

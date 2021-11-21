@@ -63,7 +63,6 @@ def accuracy(confusion_matrix):
 
 
 def train_model(data_set_path, classifier):
-    kf = KFold(n_splits=10)
     clf = MLPClassifier()
     data = pd.read_csv(data_set_path)
 

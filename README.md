@@ -2,7 +2,8 @@
 This is a project developed in a discipline at the university.
 
 ## How to execute
-    - First, install requiriments
+    !I'm can't run in Windows OS!
+    - First, install requiriments with ```pip3 install -r .\requirements.txt```
     - Second, run ```pip install flask-restful``` and ```pip install flask-cors```
     - Third, if don't exist 'jsons' folder in application folder, create.
     - Execute server.py

@@ -63,7 +63,6 @@ def accuracy(confusion_matrix):
 
 
 def train_model(data_set_path, classifier):
-    clf = MLPClassifier()
     data = pd.read_csv(data_set_path)
 
     # Splitting the dataset into  training and validation sets

@@ -114,8 +114,10 @@
         const slope = document.getElementById('slope').value;
 
         if(!age  || !sex  || !paintype  || !bpm  || !colesterol  || !glicose  || !ecg  || !maxhr  || !exercise  || !oldpeak  || !slope)
+        {
             alert("Preencha todos os campo!")
             return;
+        }
 
 
         document.getElementById('main').classList.add('disable')
@@ -125,6 +127,8 @@
         myHeaders.append("Content-Type", "application/json");
 
         const url = "https://AI-Heart-Disease-Prediction.kevennykeke.repl.co/disease";
+
+        console.log('cheguei aqui')
 
         const data =
         {
@@ -151,6 +155,8 @@
             body: JSON.stringify(data),
             redirect: 'follow'
         };
+
+        console.log('cheguei aqui 2')
 
         fetch(url, requestOptions)
         .then(response => response.json())

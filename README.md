@@ -2,16 +2,14 @@
 This is a project developed in a discipline at the university.
 
 ## How to execute in localhost
-    !! I'm can't run in Windows OS !!
+    - I'm can't run in Windows OS!
     - First, install requiriments with ```pip3 install -r .\requirements.txt```
     - Second, run ```pip install flask-restful``` and ```pip install flask-cors```
     - Third, if don't exist 'jsons' folder in application folder, create.
     - Execute src/server.py
     - Send an Json(in format on ./test.json) in this endpoint http://localhost:5444/disease (maybe your change localhost for you IP)
-    
-    - Test: 
-
 ---
+Test: ![Test1](https://user-images.githubusercontent.com/45442467/143966156-59ba659f-e295-4e7a-b595-839f811c2e2b.png)
 
 ### Production Link is:
 - https://ia-projeto-interface.kevennykeke.repl.co/

@@ -89,7 +89,10 @@
     </div>
 
     <div id="result">
-
+        <div>
+            <span id="texto-resultado"></span>
+        </div>
+        <button onclick="document.location.reload(true);">Repetir teste</button>
     </div>
 
 </body>
@@ -97,9 +100,6 @@
 <script>
 
     function sendData() {
-
-        document.getElementById('main').classList.add('disable')
-        document.getElementById('loading').classList.add('show')
 
         const age = document.getElementById('age').value;
         const sex = document.getElementById('sex').value;
@@ -113,39 +113,54 @@
         const oldpeak = document.getElementById('oldpeak').value;
         const slope = document.getElementById('slope').value;
 
-        const url = "http://192.168.1.17:5444/disease";
+        if(!age  || !sex  || !paintype  || !bpm  || !colesterol  || !glicose  || !ecg  || !maxhr  || !exercise  || !oldpeak  || !slope)
+            alert("Preencha todos os campo!")
+            return;
+
+
+        document.getElementById('main').classList.add('disable')
+        document.getElementById('loading').classList.add('show')
+
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        const url = "https://AI-Heart-Disease-Prediction.kevennykeke.repl.co/disease";
 
         const data =
         {
             "data": [
                 {
-                    "Age": age,
-                    "Sex": sex,
-                    "ChestPainType": paintype,
-                    "RestingBP": bpm,
-                    "Cholesterol": colesterol,
-                    "FastingBS": glicose,
-                    "RestingECG": ecg,
-                    "MaxHR": maxhr,
-                    "ExerciseAngina": exercise,
-                    "Oldpeak": oldpeak,
-                    "ST_Slope": slope
+                    "Age":              age,
+                    "Sex":              sex,
+                    "ChestPainType":    paintype,
+                    "RestingBP":        bpm,
+                    "Cholesterol":      colesterol,
+                    "FastingBS":        glicose,
+                    "RestingECG":       ecg,
+                    "MaxHR":            maxhr,
+                    "ExerciseAngina":   exercise,
+                    "Oldpeak":          oldpeak,
+                    "ST_Slope":         slope
                 }
             ]
         }
-        fetch(url, {
-            headers: {
-                "Content-type": "application/json"
-            },
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
             body: JSON.stringify(data),
-            method: "post"
+            redirect: 'follow'
+        };
+
+        fetch(url, requestOptions)
+        .then(response => response.json())
+        .then(response => {
+            document.getElementById('loading').classList.add('disable');
+            var theDiv = document.getElementById("texto-resultado");
+            var content = document.createTextNode(response.result);
+            theDiv.appendChild(content);
+            document.getElementById('result').classList.add('show');
         })
-            .then(res => {
-                document.getElementById('loading').classList.remove('show')
-                document.getElementById('result').classList.add('show')
-                document.getElementById("result").innerHTML(`<span>${res['result']}</span>`)
-                console.log(res)
-            });
     }
 
 </script>

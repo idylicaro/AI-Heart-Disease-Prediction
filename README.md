@@ -1,6 +1,11 @@
 # AI-Heart-Disease-Prediction
 This is a project developed in a discipline at the university.
 
+
+https://user-images.githubusercontent.com/45442467/144516921-d7bda8a9-00ef-4ca2-b591-adbb20271541.mp4
+
+
+---
 ## How to execute in localhost
     - I'm can't run in Windows OS!
     - First, install requiriments with ```pip3 install -r .\requirements.txt```
